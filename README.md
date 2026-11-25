@@ -7,7 +7,8 @@ An end-to-end solar intelligence platform designed for university campuses opera
 
 ## ⚡ Live Deployments
 
-- **🌐 Live Cloudflare Tunnel:** [https://todd-are-appropriate-currencies.trycloudflare.com](https://todd-are-appropriate-currencies.trycloudflare.com)
+- **🌐 Official GitHub Pages Site:** [https://sidhhrana.github.io/campus-solar-operations-portal/](https://sidhhrana.github.io/campus-solar-operations-portal/)
+- **⚡ Cloudflare Tunnel:** [https://todd-are-appropriate-currencies.trycloudflare.com](https://todd-are-appropriate-currencies.trycloudflare.com)
 - **💻 Local Dashboard:** `http://localhost:8501`
 
 ---
