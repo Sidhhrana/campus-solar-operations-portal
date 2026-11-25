@@ -1,6 +1,6 @@
 """
 app.py
-UPES Campus Solar Fleet — Diagnostic & Maintenance Manager
+Campus Solar Operations Portal — Diagnostic & Maintenance Manager
 Track 3: Smart Energy - Problem 3.1
 """
 
@@ -16,7 +16,7 @@ import plotly.graph_objects as go
 # Page Configuration
 # ---------------------------------------------------------
 st.set_page_config(
-    page_title="UPES Solar Maintenance Manager",
+    page_title="Campus Solar Operations Portal",
     page_icon="☀️",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -302,8 +302,8 @@ st.markdown("""
 <div class="page-header">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
         <div>
-            <span class="tag-badge">Smart Energy Track 3.1 • Campus Solar Diagnostics</span>
-            <div class="page-title">Campus Rooftop Solar Maintenance Manager</div>
+            <span class="tag-badge">Smart Energy Track 3.1 • Rooftop Solar Diagnostics</span>
+            <div class="page-title">Campus Solar Operations & Maintenance Portal</div>
             <div class="page-desc">
                 Monitoring 50 rooftop solar systems across campus buildings. This system compares live generation data against 
                 weather measurements (solar irradiance & ambient temperature) to determine exactly why a rooftop is producing 

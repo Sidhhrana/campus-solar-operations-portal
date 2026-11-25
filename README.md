@@ -1,4 +1,4 @@
-# UPES Campus Solar Fleet — Diagnostic & Maintenance Manager
+# Campus Solar Operations Portal — Diagnostic & Maintenance Manager
 > **Track 3: Smart Energy (Things That Power) — Problem 3.1: "Why is this rooftop producing less?"**
 
 An end-to-end solar intelligence platform designed for university campuses operating distributed rooftop PV fleets. By comparing live generation telemetry against weather irradiance and ambient temperature, the system autonomously identifies the root cause of underperformance — separating environmental dust from tree/building shade from failing inverters — and generates an economically self-paying maintenance schedule.
