@@ -473,18 +473,24 @@ with tab_plan:
                 "Dust / Soiling": "#F59E0B",
                 "Partial Shading": "#8B5CF6",
                 "Inverter / Hardware Fault": "#EF4444"
-            }
+            },
+            hole=0.5
         )
-        fig_p.update_traces(textposition='inside', textinfo='percent+label')
+        fig_p.update_traces(
+            textposition='inside', 
+            textinfo='percent',
+            marker=dict(line=dict(color='#FFFFFF', width=2))
+        )
         fig_p.update_layout(
             margin=dict(t=40, b=10, l=10, r=10),
-            showlegend=False,
-            height=300,
+            showlegend=True,
+            legend=dict(orientation="h", yanchor="top", y=-0.05, xanchor="center", x=0.5, font=dict(family="Inter", size=11, color="#0F172A")),
+            height=320,
             paper_bgcolor="#FFFFFF",
             plot_bgcolor="#FFFFFF",
             font=dict(family="Inter", color="#0F172A")
         )
-        st.plotly_chart(fig_p, width="stretch")
+        st.plotly_chart(fig_p, use_container_width=True)
         
     with c_bar:
         loss_by_type = df_plan.groupby("diagnosed_category")["daily_loss_inr"].sum().reset_index()
@@ -505,14 +511,14 @@ with tab_plan:
         fig_b.update_layout(
             margin=dict(t=40, b=10, l=10, r=10),
             showlegend=False,
-            height=300,
+            height=320,
             paper_bgcolor="#FFFFFF",
             plot_bgcolor="#FFFFFF",
             font=dict(family="Inter", color="#0F172A"),
-            xaxis=dict(tickfont=dict(color="#0F172A"), title_font=dict(color="#0F172A")),
-            yaxis=dict(tickfont=dict(color="#0F172A"), title_font=dict(color="#0F172A"))
+            xaxis=dict(tickfont=dict(color="#0F172A", size=11), title_font=dict(color="#0F172A")),
+            yaxis=dict(tickfont=dict(color="#0F172A"), title_font=dict(color="#0F172A"), tickprefix="₹", tickformat=",.0f")
         )
-        st.plotly_chart(fig_b, width="stretch")
+        st.plotly_chart(fig_b, use_container_width=True)
 
 # =========================================================
 # TAB 2: Rooftop Diagnostics Inspector
@@ -616,7 +622,7 @@ with tab_inspect:
             legend=dict(orientation="h", yanchor="bottom", y=-0.35, xanchor="center", x=0.5, font=dict(color="#0F172A")),
             font=dict(family="Inter", color="#0F172A")
         )
-        st.plotly_chart(fig_di, width="stretch")
+        st.plotly_chart(fig_di, use_container_width=True)
         
     with g_right:
         # 30-day energy trend
@@ -656,7 +662,7 @@ with tab_inspect:
             legend=dict(orientation="h", yanchor="bottom", y=-0.35, xanchor="center", x=0.5, font=dict(color="#0F172A")),
             font=dict(family="Inter", color="#0F172A")
         )
-        st.plotly_chart(fig_mo, width="stretch")
+        st.plotly_chart(fig_mo, use_container_width=True)
         
     # Human-readable checklist
     st.subheader("Diagnostic Evidence & Checklist")

@@ -364,21 +364,32 @@ def generate_html():
         /* Charts Grid */
         .charts-grid {{
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
             gap: 20px;
-            margin-top: 20px;
+            margin-top: 16px;
+            margin-bottom: 20px;
         }}
         .chart-box {{
             background: #FFFFFF;
             border: 1px solid var(--border);
             border-radius: 10px;
-            padding: 16px;
+            padding: 18px 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            position: relative;
         }}
         .chart-title {{
             font-size: 0.95rem;
             font-weight: 700;
             color: var(--text-main);
             margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }}
+        .chart-container {{
+            position: relative;
+            height: 270px;
+            width: 100%;
         }}
         
         /* Action Callout */
@@ -477,6 +488,28 @@ def generate_html():
 
     <!-- TAB 1: Ranked Maintenance Schedule -->
     <div id="tab-plan" class="tab-content active">
+        <!-- Fleet Summary Visual Charts -->
+        <div class="charts-grid" style="margin-top: 0; margin-bottom: 24px;">
+            <div class="chart-box">
+                <div class="chart-title">
+                    <span>Fleet Health Breakdown (50 Rooftops)</span>
+                    <span style="font-size: 0.8rem; font-weight: 500; color: #64748B;">3,060 kW Capacity</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="donutChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-box">
+                <div class="chart-title">
+                    <span>Daily Financial Loss by Category (₹/day)</span>
+                    <span style="font-size: 0.8rem; font-weight: 500; color: #DC2626;">Total: ₹17,173 / day</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+        </div>
+
         <div class="card-box">
             <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 6px;">Prioritized Maintenance Action List</h2>
             <p style="font-size: 0.9rem; color: #475569; margin-bottom: 16px;">
@@ -540,17 +573,6 @@ def generate_html():
                 <span style="font-size: 0.85rem; color: #64748B;">Showing all 50 campus rooftop solar installations</span>
             </div>
         </div>
-
-        <div class="charts-grid">
-            <div class="chart-box">
-                <div class="chart-title">Fleet Breakdown: 50 Rooftops by Condition</div>
-                <canvas id="donutChart" height="220"></canvas>
-            </div>
-            <div class="chart-box">
-                <div class="chart-title">Daily Financial Loss by Issue Category (₹/day)</div>
-                <canvas id="barChart" height="220"></canvas>
-            </div>
-        </div>
     </div>
 
     <!-- TAB 2: Rooftop Diagnostics Inspector -->
@@ -574,12 +596,22 @@ def generate_html():
 
             <div class="charts-grid">
                 <div class="chart-box">
-                    <div class="chart-title">Diurnal Generation Curve: Expected vs Actual (Clear Day)</div>
-                    <canvas id="diurnalChart" height="220"></canvas>
+                    <div class="chart-title">
+                        <span>Diurnal Generation Curve (Clear Sky Baseline vs Actual)</span>
+                        <span style="font-size: 0.75rem; font-weight: 500; color: #64748B;">Hourly Active Power (kW)</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="diurnalChart"></canvas>
+                    </div>
                 </div>
                 <div class="chart-box">
-                    <div class="chart-title">30-Day Energy Yield & Rain Recovery Dynamic</div>
-                    <canvas id="monthlyChart" height="220"></canvas>
+                    <div class="chart-title">
+                        <span>30-Day Daily Yield History (Rain Recovery Event on Day 18)</span>
+                        <span style="font-size: 0.75rem; font-weight: 500; color: #64748B;">Daily Yield (kWh)</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
                 </div>
             </div>
 
@@ -741,6 +773,8 @@ def generate_html():
 
         let diurnalChartInst = null;
         let monthlyChartInst = null;
+        let donutChartInst = null;
+        let barChartInst = null;
 
         // Switch Tabs
         function switchTab(tabId, btn) {{
@@ -751,6 +785,11 @@ def generate_html():
 
             if (tabId === 'inspect') {{
                 setTimeout(renderRooftopDetails, 50);
+            }} else if (tabId === 'plan') {{
+                setTimeout(() => {{
+                    if (donutChartInst) donutChartInst.resize();
+                    if (barChartInst) barChartInst.resize();
+                }}, 50);
             }}
         }}
 
@@ -935,6 +974,7 @@ def generate_html():
                 }},
                 options: {{
                     responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {{ legend: {{ position: 'bottom' }} }},
                     scales: {{
                         y: {{ title: {{ display: true, text: 'Active Power (kW)' }} }},
@@ -974,6 +1014,7 @@ def generate_html():
                 }},
                 options: {{
                     responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {{ legend: {{ position: 'bottom' }} }},
                     scales: {{
                         y: {{ title: {{ display: true, text: 'Energy Yield (kWh/day)' }} }}
@@ -987,39 +1028,98 @@ def generate_html():
             // Donut
             const counts = {{ 'Healthy': 15, 'Dust / Soiling': 15, 'Partial Shading': 12, 'Inverter / Hardware Fault': 8 }};
             const donutCtx = document.getElementById('donutChart').getContext('2d');
-            new Chart(donutCtx, {{
+            if (donutChartInst) donutChartInst.destroy();
+            donutChartInst = new Chart(donutCtx, {{
                 type: 'doughnut',
                 data: {{
-                    labels: Object.keys(counts),
+                    labels: ['Healthy (15)', 'Dust / Soiling (15)', 'Partial Shading (12)', 'Inverter Fault (8)'],
                     datasets: [{{
-                        data: Object.values(counts),
-                        backgroundColor: ['#10B981', '#F59E0B', '#8B5CF6', '#EF4444']
+                        data: [15, 15, 12, 8],
+                        backgroundColor: ['#10B981', '#F59E0B', '#8B5CF6', '#EF4444'],
+                        borderWidth: 2,
+                        borderColor: '#FFFFFF',
+                        hoverOffset: 6
                     }}]
                 }},
                 options: {{
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {{ legend: {{ position: 'bottom' }} }}
+                    cutout: '65%',
+                    plugins: {{
+                        legend: {{
+                            position: 'bottom',
+                            labels: {{
+                                boxWidth: 12,
+                                padding: 14,
+                                font: {{ size: 12, family: 'Inter', weight: '600' }},
+                                color: '#334155'
+                            }}
+                        }},
+                        tooltip: {{
+                            callbacks: {{
+                                label: function(ctx) {{
+                                    const total = 50;
+                                    const val = ctx.parsed;
+                                    const pct = ((val / total) * 100).toFixed(0);
+                                    return ` ${{ctx.label}}: ${{val}} systems (${{pct}}% of campus)`;
+                                }}
+                            }}
+                        }}
+                    }}
                 }}
             }});
 
             // Bar
             const barCtx = document.getElementById('barChart').getContext('2d');
-            new Chart(barCtx, {{
+            if (barChartInst) barChartInst.destroy();
+            barChartInst = new Chart(barCtx, {{
                 type: 'bar',
                 data: {{
-                    labels: ['Dust / Soiling', 'Partial Shading', 'Inverter Fault', 'Healthy'],
+                    labels: ['Dust / Soiling', 'Inverter Fault', 'Partial Shading', 'Healthy'],
                     datasets: [{{
                         label: 'Daily Revenue Loss (₹/day)',
-                        data: [7375, 4120, 5678, 0],
-                        backgroundColor: ['#F59E0B', '#8B5CF6', '#EF4444', '#10B981']
+                        data: [7375, 5678, 4120, 0],
+                        backgroundColor: ['#F59E0B', '#EF4444', '#8B5CF6', '#10B981'],
+                        borderRadius: 6,
+                        maxBarThickness: 48
                     }}]
                 }},
                 options: {{
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {{ legend: {{ display: false }} }},
-                    scales: {{ y: {{ title: {{ display: true, text: 'Daily Loss (₹)' }} }} }}
+                    plugins: {{
+                        legend: {{ display: false }},
+                        tooltip: {{
+                            callbacks: {{
+                                label: function(ctx) {{
+                                    return ` Daily Financial Loss: ₹${{ctx.parsed.y.toLocaleString()}} / day`;
+                                }}
+                            }}
+                        }}
+                    }},
+                    scales: {{
+                        y: {{
+                            beginAtZero: true,
+                            title: {{
+                                display: true,
+                                text: 'Daily Loss (₹ / day)',
+                                color: '#475569',
+                                font: {{ size: 12, weight: '600' }}
+                            }},
+                            ticks: {{
+                                color: '#64748B',
+                                font: {{ size: 11 }},
+                                callback: function(val) {{
+                                    return '₹' + val.toLocaleString();
+                                }}
+                            }},
+                            grid: {{ color: '#F1F5F9', drawBorder: false }}
+                        }},
+                        x: {{
+                            ticks: {{ color: '#334155', font: {{ weight: '600', size: 11 }} }},
+                            grid: {{ display: false }}
+                        }}
+                    }}
                 }}
             }});
         }}
