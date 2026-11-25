@@ -78,8 +78,8 @@ $$\tau_{\text{payback}} = \frac{\text{Service Cost (₹)}}{\text{Daily Revenue L
 
 ### 1. Clone & Set Up Environment
 ```bash
-git clone https://github.com/Sidhhrana/upes-campus-solar-diagnostics.git
-cd upes-campus-solar-diagnostics
+git clone https://github.com/Sidhhrana/campus-solar-operations-portal.git
+cd campus-solar-operations-portal
 
 python3 -m venv venv
 source venv/bin/activate
