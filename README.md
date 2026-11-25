@@ -7,7 +7,7 @@ An end-to-end solar intelligence platform designed for university campuses opera
 
 ## ⚡ Live Deployments
 
-- **🌐 Live Cloudflare Tunnel:** [https://manager-reading-physics-performing.trycloudflare.com](https://manager-reading-physics-performing.trycloudflare.com)
+- **🌐 Live Cloudflare Tunnel:** [https://todd-are-appropriate-currencies.trycloudflare.com](https://todd-are-appropriate-currencies.trycloudflare.com)
 - **💻 Local Dashboard:** `http://localhost:8501`
 
 ---
