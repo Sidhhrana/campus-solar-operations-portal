@@ -1,0 +1,21 @@
+{
+  "total_systems": 50,
+  "total_campus_capacity_kw": 3060.0,
+  "total_30d_generation_kwh": 468246.1,
+  "total_30d_expected_kwh": 528856.5,
+  "total_30d_lost_energy_kwh": 60611.3,
+  "overall_energy_loss_pct": 11.5,
+  "daily_financial_loss_inr": 17173.07,
+  "monthly_financial_loss_inr": 515191.8,
+  "annualized_financial_loss_inr": 6182301.6,
+  "actionable_maintenance_cost_inr": 171500.0,
+  "net_30d_profit_from_actions_inr": 330431.8,
+  "ml_model_r2_score": 0.9984,
+  "diagnostic_accuracy_pct": 100.0,
+  "category_distribution": {
+    "Healthy": 15,
+    "Dust / Soiling": 15,
+    "Partial Shading": 12,
+    "Inverter / Hardware Fault": 8
+  }
+}

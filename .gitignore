@@ -1,0 +1,18 @@
+# Python Virtual Environment
+venv/
+env/
+.env
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Streamlit logs
+.streamlit/secrets.toml
+
+# System files
+.DS_Store
+*.log
